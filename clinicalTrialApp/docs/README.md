@@ -10,3 +10,4 @@ They are written to be read in order.
 - `05-step3-matcher-findings.md` — diagnosis crosswalk (98% coverage) + hierarchical matcher + structured filters.
 - `06-step4-gene-layer-findings.md` — gene dictionary, section-aware scan, LLM classifier, three-valued matching; the query-time-cost finding.
 - `07-step5-ui-and-clinician-test.md` — the thin UI, clinician-test protocol, corpus expansion, and data-quality filtering.
+- `08-known-issues-criteria-normalization.md` — **known issues & future work** for the free-text → structured criteria normalization pipeline (diagnosis, biomarker, clinical criteria). Read this before extending the extractors.
