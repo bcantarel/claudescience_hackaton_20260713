@@ -1,0 +1,11 @@
+# Ephemeral / large data — re-fetchable from sources in README §4
+*.pkl
+*.npy
+/tmp/
+counts_raw*
+wgcna_input*
+dissTOM*
+*.tar.gz
+*.gz
+__pycache__/
+.DS_Store

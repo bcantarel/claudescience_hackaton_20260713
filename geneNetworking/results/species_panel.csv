@@ -1,0 +1,31 @@
+species,taxid,common,divergence_mya,clade
+Homo_sapiens,9606,human,0.0,Primate
+Pan_troglodytes,9598,chimpanzee,6.4,Primate
+Pan_paniscus,9597,bonobo,6.4,Primate
+Gorilla_gorilla,9593,gorilla,8.6,Primate
+Callithrix_jacchus,9483,marmoset,43.0,Primate
+Macaca_mulatta,9544,macaque,29.0,Primate
+Macaca_fascicularis,9541,crab-eating macaque,29.0,Primate
+Papio_anubis,9555,olive baboon,29.0,Primate
+Chlorocebus_sabaeus,60711,green monkey,29.0,Primate
+Cercocebus_atys,9531,sooty mangabey,29.0,Primate
+Microcebus_murinus,30608,mouse lemur,74.0,Primate
+Mus_musculus,10090,mouse,87.0,Rodent
+Rattus_norvegicus,10116,rat,87.0,Rodent
+Cavia_porcellus,10141,guinea pig,87.0,Rodent
+Heterocephalus_glaber,10181,naked mole rat,87.0,Rodent
+Oryctolagus_cuniculus,9986,rabbit,87.0,Lagomorph
+Canis_lupus_familiaris,9615,dog,94.0,Carnivore
+Felis_catus,9685,cat,94.0,Carnivore
+Sus_scrofa,9823,pig,94.0,Ungulate
+Bos_taurus,9913,cattle,94.0,Ungulate
+Capra_hircus,9925,goat,94.0,Ungulate
+Ovis_aries,9940,sheep,94.0,Ungulate
+Equus_caballus,9796,horse,94.0,Perissodactyl
+Monodelphis_domestica,13616,opossum,160.0,Marsupial
+Ornithorhynchus_anatinus,9258,platypus,180.0,Monotreme
+Gallus_gallus,9031,chicken,319.0,Bird
+Meleagris_gallopavo,9103,turkey,319.0,Bird
+Anolis_carolinensis,28377,green anole,319.0,Reptile
+Xenopus_tropicalis,8364,frog,352.0,Amphibian
+Danio_rerio,7955,zebrafish,429.0,Fish

@@ -1,0 +1,11 @@
+# Python (coexpr env) — Python 3.13
+numpy
+pandas
+scipy
+scikit-learn
+dynamicTreeCut
+lightgbm
+pyarrow
+requests
+matplotlib
+# R (phylo env) — R 4.5:  install.packages(c("ape","phytools","nlme"))

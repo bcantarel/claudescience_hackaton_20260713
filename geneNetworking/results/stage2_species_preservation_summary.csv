@@ -1,0 +1,27 @@
+species,common_name,clade,divergence_mya,n_tissues,n_libraries,n_ortholog_genes,median_Zsummary,mean_Zsummary,frac_modules_preserved,n_modules_strong,recovered_via_symbol_bridge
+Pan_troglodytes,chimpanzee,Primate,6.4,19,343,10169,4.1,6.487,0.667,6,False
+Macaca_fascicularis,crab-eating macaque,Primate,29.0,19,140,8784,8.555,13.06,0.846,13,False
+Macaca_mulatta,macaque,Primate,29.0,75,991,10047,3.06,6.794,0.741,6,False
+Chlorocebus_sabaeus,green monkey,Primate,29.0,8,554,10285,5.6,6.916,0.704,10,False
+Papio_anubis,olive baboon,Primate,29.0,72,812,9159,10.84,15.687,0.923,14,False
+Callithrix_jacchus,marmoset,Primate,43.0,9,75,9244,7.095,9.966,0.846,11,False
+Microcebus_murinus,mouse lemur,Primate,74.0,7,23,9605,4.85,7.783,0.778,6,False
+Cavia_porcellus,guinea pig,Rodent,87.0,15,303,9555,4.87,9.354,0.741,10,False
+Rattus_norvegicus,rat,Rodent,87.0,40,1193,9214,4.82,10.585,0.778,9,False
+Oryctolagus_cuniculus,rabbit,Lagomorph,87.0,22,461,8715,3.11,6.81,0.519,7,False
+Heterocephalus_glaber,naked mole rat,Rodent,87.0,12,273,6707,3.05,4.524,0.556,4,False
+Mus_musculus,mouse,Rodent,87.0,95,3414,10017,4.81,7.743,0.741,8,False
+Ovis_aries,sheep,Ungulate,94.0,91,1179,8800,7.21,8.629,0.852,8,True
+Capra_hircus,goat,Ungulate,94.0,23,189,9673,8.35,15.727,0.889,11,False
+Bos_taurus,cattle,Ungulate,94.0,113,2526,9447,10.34,17.292,0.963,14,False
+Canis_lupus_familiaris,dog,Carnivore,94.0,38,258,8716,7.27,10.715,0.808,11,True
+Felis_catus,cat,Carnivore,94.0,13,62,8655,2.19,4.675,0.538,6,True
+Equus_caballus,horse,Perissodactyl,94.0,31,319,9370,12.77,17.771,0.926,15,False
+Sus_scrofa,pig,Ungulate,94.0,123,2866,9567,10.18,13.424,0.852,15,False
+Monodelphis_domestica,opossum,Marsupial,160.0,23,398,8628,0.88,1.541,0.407,0,False
+Ornithorhynchus_anatinus,platypus,Monotreme,180.0,6,42,8778,4.64,6.27,0.667,8,False
+Anolis_carolinensis,green anole,Reptile,319.0,14,149,7044,0.86,2.668,0.407,3,False
+Gallus_gallus,chicken,Bird,319.0,22,440,7344,3.47,6.009,0.593,6,True
+Meleagris_gallopavo,turkey,Bird,319.0,20,606,6276,5.42,7.052,0.741,7,False
+Xenopus_tropicalis,frog,Amphibian,352.0,11,274,7298,4.0,7.637,0.778,8,False
+Danio_rerio,zebrafish,Fish,429.0,18,217,5910,3.9,7.952,0.593,8,False

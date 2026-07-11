@@ -1,0 +1,7 @@
+species,solid_tissues_ge3rep,core_tissues_covered,core_list,PASS
+Phascolarctos cinereus,5,4,"['brain', 'liver', 'spleen', 'testis']",True
+Sarcophilus harrisii,11,3,"['kidney', 'liver', 'spleen']",True
+Sminthopsis crassicaudata,9,3,"['brain', 'ovary', 'spleen']",True
+Notamacropus eugenii,8,0,[],True
+Trichosurus vulpecula,4,3,"['brain', 'kidney', 'liver']",False
+Vombatus ursinus,0,0,[],False

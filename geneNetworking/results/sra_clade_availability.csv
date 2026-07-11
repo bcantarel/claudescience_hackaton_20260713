@@ -1,0 +1,18 @@
+common,species,transcriptomic_runs,rnaseq_runs,clade
+African elephant,Loxodonta africana,41,26,Afrotheria
+Tenrec,Echinops telfairi,12,12,Afrotheria
+Rock hyrax,Procavia capensis,4,4,Afrotheria
+Cape golden mole,Chrysochloris asiatica,0,0,Afrotheria
+Asian elephant,Elephas maximus,-1,-1,Afrotheria
+Manatee,Trichechus manatus,-1,-1,Afrotheria
+Aardvark,Orycteropus afer,-1,-1,Afrotheria
+Elephant shrew,Elephantulus edwardii,-1,-1,Afrotheria
+Koala,Phascolarctos cinereus,549,247,Marsupial
+Brushtail possum,Trichosurus vulpecula,145,145,Marsupial
+Fat-tailed dunnart,Sminthopsis crassicaudata,60,60,Marsupial
+Tasmanian devil,Sarcophilus harrisii,-1,-1,Marsupial
+Tammar wallaby,Notamacropus eugenii,-1,-1,Marsupial
+Wombat,Vombatus ursinus,-1,-1,Marsupial
+Nine-banded armadillo,Dasypus novemcinctus,122,121,Xenarthra
+Giant anteater,Myrmecophaga tridactyla,1,1,Xenarthra
+Two-toed sloth,Choloepus didactylus,-1,-1,Xenarthra
