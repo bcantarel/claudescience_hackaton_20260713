@@ -62,6 +62,14 @@
   .toolbar button{width:auto;margin:0}
   .rank-g{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:16px 0 8px;font-weight:650}
   .conflict{color:var(--unknown);font-size:11px;margin-top:4px}
+  details.elig{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+  details.elig>summary{cursor:pointer;font-size:12px;color:var(--accent);user-select:none;list-style:none}
+  details.elig>summary::-webkit-details-marker{display:none}
+  details.elig>summary::before{content:"▸ ";}
+  details.elig[open]>summary::before{content:"▾ ";}
+  .eligbody{white-space:pre-wrap;font-size:12px;line-height:1.5;color:var(--muted);margin-top:8px;max-height:360px;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+  .eligbody b{color:var(--ink)}
+  .eligbody mark{background:#123a2a;color:var(--met);border-radius:3px;padding:0 2px}
 </style>
 </head>
 <body>
@@ -225,6 +233,22 @@ function run(activeCase){
 }
 
 function badge(r){return `<span class="badge ${r}">${r.replace('_',' ')}</span>`;}
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function formatElig(text, ptGenes){
+  if(!text) return '<span style="color:var(--muted)">No eligibility criteria text available.</span>';
+  let h=esc(text);
+  // bold section headers
+  h=h.replace(/(Inclusion Criteria|Exclusion Criteria|Key Inclusion Criteria|Key Exclusion Criteria)\s*:?/gi, m=>`<b>${m}</b>`);
+  // highlight the patient's gene aliases
+  const aliases=[];
+  ptGenes.forEach(g=>(BUNDLE.geneAliases[g]||[g]).forEach(a=>aliases.push(a)));
+  if(aliases.length){
+    const uniq=[...new Set(aliases)].sort((a,b)=>b.length-a.length).map(a=>a.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
+    const rx=new RegExp('(?<![A-Za-z0-9])('+uniq.join('|')+')(?![A-Za-z0-9])','g'); // case-sensitive: gene symbols are uppercase
+    h=h.replace(rx,'<mark>$1</mark>');
+  }
+  return h;
+}
 function render(rows,ctx){
   const el=document.getElementById('results');
   const nMet=rows.filter(r=>r.bsig==='MET').length;
@@ -271,6 +295,7 @@ function render(rows,ctx){
     } else if(ctx.ptGenes.length){
       html+=`<div class="bio"><span class="badge UNKNOWN">UNKNOWN</span> none of the entered genes are named in this trial's cached criteria — biomarker requirement unspecified here.</div>`;
     }
+    html+=`<details class="elig"><summary>Full eligibility criteria (inclusion + exclusion)</summary><div class="eligbody">${formatElig(r.t.elig, ctx.ptGenes)}</div></details>`;
     html+=`<div class="flagrow">
       <button class="flagbtn ${f.flagged?'on':''}" onclick="toggleFlag('${r.t.nct}',this)">${f.flagged?'⚑ flagged':'⚐ flag for review'}</button>
       <input class="flagnote" placeholder="clinician note (e.g. wrong variant, should/shouldn't match)…" value="${(f.note||'').replace(/"/g,'&quot;')}" onchange="setNote('${r.t.nct}',this.value)"/>

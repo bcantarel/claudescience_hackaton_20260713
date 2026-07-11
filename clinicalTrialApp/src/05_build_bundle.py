@@ -39,8 +39,10 @@ for s in S:
     if lud and (TODAY-lud).days>365: stale_reasons.append(f"not updated in {(TODAY-lud).days//30} months")
     if stale_reasons: n_stale+=1
     tc=crosswalk(s, by_code)
+    elig_text=(elig.get("eligibilityCriteria") or "").strip()
     trials.append({
         "nct":nct,"title":g(ps,"identificationModule","briefTitle"),
+        "elig":elig_text,
         "status":g(ps,"statusModule","overallStatus"),
         "minAge":elig.get("minimumAge"),"maxAge":elig.get("maximumAge"),"sex":elig.get("sex","ALL"),
         "phase":(g(ps,"designModule","phases") or ["NA"]),
@@ -62,6 +64,7 @@ bundle={
   "counts":{"searchable":len(trials),"stale":n_stale},
   "trials":trials,"ancestors":anc_map,"dxOptions":dx_options,"geneCache":cache,
   "genes":["EGFR","ALK","ROS1","KRAS","MET","BRAF","RET","ERBB2","NTRK","NRG1"],
+  "geneAliases":{sym:v["aliases"] for sym,v in __import__("genes_dict").PANEL.items()},
 }
 json.dump(bundle, open("data/bundle_full.json","w"))
 import os
