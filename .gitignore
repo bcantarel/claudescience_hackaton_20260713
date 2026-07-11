@@ -25,3 +25,11 @@ _import.tar.gz
 # Repo delivery archive (leftover; safe to delete)
 repo_import.tar.gz
 *.tar.gz
+
+# iOS / Xcode
+ios_app.tar.gz
+*.tar.gz
+xcuserdata/
+*.xcuserstate
+clinicalTrialApp/ios/build/
+DerivedData/
