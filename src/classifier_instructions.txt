@@ -1,0 +1,20 @@
+CLASSIFIER INSTRUCTIONS (clinical-trial eligibility, per biomarker).
+For each item classify what the trial REQUIRES about that biomarker for enrollment.
+Use `section` (inclusion/exclusion/unknown) as strong evidence: "no GENE mutation" under
+INCLUSION => WILD_TYPE_REQUIRED; the same under EXCLUSION => ALTERATION_EXCLUDED.
+
+direction values:
+- ALTERED_REQUIRED: trial requires the patient to HAVE an alteration in this gene
+  (e.g. "documented EGFR sensitizing mutation", "ALK-positive", "MET exon 14 skipping",
+   "KRAS G12C mutation", "activating EGFR mutation" as inclusion).
+- WILD_TYPE_REQUIRED: trial requires wild-type / no alteration as an INCLUSION condition
+  (e.g. "EGFR/ALK wild-type", "without EGFR sensitizing mutation", "ALK negative", "no GENE mutation").
+- ALTERATION_EXCLUDED: an alteration in this gene is framed as an EXCLUSION criterion
+  ("must not have EGFR mutations", "Exclude subjects with known ALK", under exclusion section).
+- NOT_A_REQUIREMENT: not an enrollment gate on this gene's status - prior GENE-targeted therapy,
+  testing logistics ("testing not required", "may be consented prior to status known"), background.
+
+Rules: WILD_TYPE_REQUIRED vs ALTERATION_EXCLUDED - choose EXCLUDED only when framed as exclusion
+(explicit "exclude"/"must not"/section=exclusion), else WILD_TYPE_REQUIRED. A drug/therapy targeting
+the gene is NOT_A_REQUIREMENT. cited_span MUST be an exact substring of the snippet.
+Output ONE json object per item: {"i":<i>,"direction":"...","confidence":"high|medium|low","cited_span":"..."}

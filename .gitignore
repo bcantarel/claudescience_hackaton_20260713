@@ -1,0 +1,27 @@
+# Large raw data snapshot — regenerate with src/01_pull_ctgov.py
+src/data/nsclc_recruiting.json
+
+# Intermediate/scratch classification files
+src/data/exp/
+src/data/batch_*.json
+src/data/result_*.json
+src/data/units_*.json
+src/data/subset.json
+src/data/candidates_*.json
+src/data/classify_sample.json
+src/data/demo_slice.json
+src/data/_bundle.js
+src/data/_cases.js
+
+# Python / Node / OS
+__pycache__/
+*.pyc
+node_modules/
+.DS_Store
+
+# Import archive (leftover from repo delivery)
+_import.tar.gz
+
+# Repo delivery archive (leftover; safe to delete)
+repo_import.tar.gz
+*.tar.gz

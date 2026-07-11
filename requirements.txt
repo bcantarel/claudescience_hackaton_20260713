@@ -1,0 +1,5 @@
+# Core pipeline and matcher use the Python 3.9+ standard library only
+# (urllib, json, re) — no third-party packages required.
+#
+# Optional, only for the headless browser tests in tests/verify_tool.js:
+#   Node.js + playwright  (npm i playwright)

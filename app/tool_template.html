@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ClinicalTrialFinder — NSCLC MVP (clinician test)</title>
+<style>
+  :root{
+    --bg:#0f1720; --panel:#16212e; --panel2:#1c2a3a; --line:#283span; --line:#2a3a4d;
+    --ink:#e7eef6; --muted:#93a4b7; --accent:#4c9be8;
+    --met:#2ea36b; --notmet:#d0555f; --unknown:#c99a3a;
+    --chip:#22344a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  header{padding:16px 22px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:10}
+  header h1{margin:0;font-size:16px;font-weight:650}
+  header .sub{color:var(--muted);font-size:12px;margin-top:3px}
+  .wrap{display:grid;grid-template-columns:340px 1fr;gap:0;min-height:calc(100vh - 58px)}
+  .panel{background:var(--panel);border-right:1px solid var(--line);padding:18px;overflow:auto}
+  .results{padding:18px 22px;overflow:auto}
+  label{display:block;font-size:12px;color:var(--muted);margin:14px 0 5px}
+  select,input{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+    border-radius:8px;padding:9px 10px;font-size:14px}
+  .genes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:6px}
+  .gene{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px;text-align:center;cursor:pointer;user-select:none;font-size:12px}
+  .gene .st{display:block;font-size:10px;margin-top:2px;color:var(--muted)}
+  .gene.altered{border-color:var(--met);background:#122a1f}
+  .gene.altered .st{color:var(--met)}
+  .gene.wildtype{border-color:var(--accent);background:#12233a}
+  .gene.wildtype .st{color:var(--accent)}
+  button{background:var(--accent);color:#04121f;border:0;border-radius:8px;padding:10px 14px;font-weight:650;cursor:pointer;width:100%;margin-top:16px;font-size:14px}
+  button.sec{background:var(--panel2);color:var(--ink);border:1px solid var(--line);font-weight:500}
+  .cases{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .case{font-size:11px;background:var(--chip);border:1px solid var(--line);border-radius:20px;padding:4px 9px;cursor:pointer;color:var(--muted)}
+  .case:hover{color:var(--ink);border-color:var(--accent)}
+  .summary{color:var(--muted);font-size:13px;margin-bottom:12px}
+  .disclaimer{background:#2a2417;border:1px solid #5a4a1e;color:#e5cf94;border-radius:8px;padding:9px 11px;font-size:12px;margin-bottom:14px}
+  .trial{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+  .trial .top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+  .trial h3{margin:0;font-size:14px;font-weight:600;line-height:1.35}
+  .trial h3 a{color:var(--ink);text-decoration:none}
+  .trial h3 a:hover{color:var(--accent)}
+  .nct{font-size:11px;color:var(--muted);font-family:ui-monospace,monospace;white-space:nowrap}
+  .dims{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+  .dim{font-size:11px;border-radius:6px;padding:3px 8px;border:1px solid var(--line);background:var(--panel2)}
+  .dim b{font-weight:650}
+  .badge{font-size:11px;font-weight:700;border-radius:6px;padding:3px 9px;white-space:nowrap}
+  .MET{background:#122a1f;color:var(--met);border:1px solid var(--met)}
+  .NOT_MET{background:#2a1518;color:var(--notmet);border:1px solid var(--notmet)}
+  .UNKNOWN{background:#2a2417;color:var(--unknown);border:1px solid var(--unknown)}
+  .bio{margin-top:10px;border-top:1px solid var(--line);padding-top:9px}
+  .bio .row{display:flex;gap:9px;align-items:flex-start;margin:6px 0}
+  .cite{color:var(--muted);font-size:12px;font-style:italic;border-left:2px solid var(--line);padding-left:9px}
+  .sec-tag{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+  .conf{font-size:10px;color:var(--muted)}
+  .flagrow{margin-top:10px;border-top:1px dashed var(--line);padding-top:9px;display:flex;gap:8px;align-items:center}
+  .flagbtn{width:auto;margin:0;padding:5px 10px;font-size:11px;background:var(--panel2);color:var(--muted);border:1px solid var(--line);font-weight:500}
+  .flagbtn.on{background:#2a1518;color:var(--notmet);border-color:var(--notmet)}
+  .flagnote{flex:1;font-size:12px;padding:5px 8px}
+  .toolbar{display:flex;gap:8px;margin-bottom:12px}
+  .toolbar button{width:auto;margin:0}
+  .rank-g{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:16px 0 8px;font-weight:650}
+  .conflict{color:var(--unknown);font-size:11px;margin-top:4px}
+</style>
+</head>
+<body>
+<header>
+  <h1>ClinicalTrialFinder — NSCLC MVP</h1>
+  <div class="sub">Candidate-trial finder for physician review · diagnosis (OncoTree) + age/sex + gene-level biomarker · <span id="meta"></span></div>
+</header>
+<div class="wrap">
+  <div class="panel">
+    <label>Load synthetic test case</label>
+    <div class="cases" id="cases"></div>
+
+    <label for="dx">Diagnosis (OncoTree)</label>
+    <select id="dx"></select>
+
+    <label for="age">Age</label>
+    <input id="age" type="number" min="0" max="120" value="60"/>
+
+    <label for="sex">Sex</label>
+    <select id="sex"><option>FEMALE</option><option>MALE</option></select>
+
+    <label>Gene profile (click to cycle: — → altered → wild-type)</label>
+    <div class="genes" id="genes"></div>
+
+    <button id="run">Find candidate trials</button>
+    <button id="export" class="sec">Export clinician review (JSON)</button>
+
+    <label style="margin-top:18px">Data quality filters</label>
+    <div style="font-size:12px;color:var(--muted)">
+      <label style="display:flex;align-items:center;gap:7px;margin:6px 0;color:var(--ink);font-size:12px">
+        <input type="checkbox" id="hideStale" checked style="width:auto"/> Hide likely-stale trials
+      </label>
+      <div id="filterInfo" style="line-height:1.45"></div>
+    </div>
+  </div>
+  <div class="results" id="results">
+    <div class="summary">Pick a diagnosis and gene profile (or load a test case), then “Find candidate trials”.</div>
+  </div>
+</div>
+<script>__BUNDLE__</script>
+<script>__CASES__</script>
+<script>
+const geneState={}; // sym -> 'altered'|'wildtype'|undefined
+const flags={};     // nct -> {flagged:bool, note:str}
+
+function initGenes(){
+  const box=document.getElementById('genes'); box.innerHTML='';
+  BUNDLE.genes.forEach(sym=>{
+    const d=document.createElement('div'); d.className='gene'; d.dataset.sym=sym;
+    d.innerHTML=`${sym}<span class="st">—</span>`;
+    d.onclick=()=>{
+      const cur=geneState[sym];
+      const nxt = cur===undefined?'altered':cur==='altered'?'wildtype':undefined;
+      if(nxt===undefined) delete geneState[sym]; else geneState[sym]=nxt;
+      paintGene(d,sym);
+    };
+    box.appendChild(d);
+  });
+}
+function paintGene(d,sym){
+  const s=geneState[sym]; d.className='gene'+(s?' '+s:'');
+  d.querySelector('.st').textContent = s==='altered'?'ALTERED':s==='wildtype'?'wild-type':'—';
+}
+function repaintGenes(){document.querySelectorAll('.gene').forEach(d=>paintGene(d,d.dataset.sym));}
+
+function initDx(){
+  const sel=document.getElementById('dx');
+  BUNDLE.dxOptions.forEach(o=>{const op=document.createElement('option');op.value=o.code;op.textContent=`${o.name} (${o.code})`;sel.appendChild(op);});
+  sel.value='LUAD';
+}
+function initCases(){
+  const box=document.getElementById('cases');
+  CASES.forEach(c=>{
+    const b=document.createElement('div'); b.className='case'; b.textContent=c.id+' · '+c.label;
+    b.title=c.note;
+    b.onclick=()=>{
+      document.getElementById('dx').value=c.oncotree;
+      document.getElementById('age').value=c.age;
+      document.getElementById('sex').value=c.sex;
+      for(const k in geneState) delete geneState[k];
+      Object.assign(geneState, c.biomarkers);
+      repaintGenes(); run(c);
+    };
+    box.appendChild(b);
+  });
+}
+
+// --- matcher logic (mirrors matcher.py / classifier.py) ---
+function parseAge(a){ if(!a) return null; const m=(''+a).match(/(\d+)/); return m?+m[1]:null; }
+function dxRelation(pt, trialCodes){
+  const anc=BUNDLE.ancestors[pt]||[pt]; const ancSet=new Set(anc);
+  for(const tc of trialCodes){ if(tc===pt) return ['exact',tc]; }
+  for(const tc of trialCodes){ if(ancSet.has(tc)) return ['broader',tc]; }
+  for(const tc of trialCodes){ const ta=BUNDLE.ancestors[tc]||[tc]; if(ta.includes(pt)) return ['narrower',tc]; }
+  return [null,null];
+}
+function mapBio(direction, hasAlt){
+  if(direction==='NOT_A_REQUIREMENT') return ['UNKNOWN','mentioned but not an enrollment gate'];
+  if(hasAlt===undefined) return ['UNKNOWN','trial gates on this gene; status not entered'];
+  if(direction==='ALTERED_REQUIRED') return [hasAlt?'MET':'NOT_MET','trial requires an alteration'];
+  if(direction==='WILD_TYPE_REQUIRED') return [hasAlt?'NOT_MET':'MET','trial requires wild-type'];
+  if(direction==='ALTERATION_EXCLUDED') return [hasAlt?'NOT_MET':'MET','alteration is exclusionary'];
+  return ['UNKNOWN','unclassified'];
+}
+const RANK={MET:0,UNKNOWN:1,NA:2,NOT_MET:3};
+
+function run(activeCase){
+  const pt=document.getElementById('dx').value;
+  const age=parseAge(document.getElementById('age').value);
+  const sex=document.getElementById('sex').value;
+  const hideStale=document.getElementById('hideStale').checked;
+  const ptGenes=Object.keys(geneState);
+  const rows=[]; let staleHidden=0;
+  for(const t of BUNDLE.trials){
+    const [rel,basis]=dxRelation(pt,t.dxCodes);
+    if(!rel) continue;
+    if(hideStale && t.stale){ staleHidden++; continue; }
+    const lo=parseAge(t.minAge)??0, hiRaw=parseAge(t.maxAge), hi=hiRaw??200;
+    if(!(age>=lo && age<=hi)) continue;
+    if(!(t.sex==='ALL'||t.sex===sex)) continue;
+    // biomarker dimensions for patient's genes
+    const bios=[];
+    for(const gsym of ptGenes){
+      const key=t.nct+'|'+gsym;
+      const c=BUNDLE.geneCache[key];
+      if(!c) continue; // gene not mentioned in this trial's (cached) criteria
+      const [res,why]=mapBio(c.direction, geneState[gsym]);
+      bios.push({gene:gsym,result:res,why,dir:c.direction,cite:c.cited_span,section:c.section,conf:c.confidence,conflict:c.conflict,all_dirs:c.all_dirs});
+    }
+    // overall biomarker signal for ranking: worst-case surface = MET if any MET, else NOT_MET if any, else UNKNOWN
+    let bsig='NA';
+    if(bios.some(b=>b.result==='MET')) bsig='MET';
+    else if(bios.some(b=>b.result==='NOT_MET')) bsig='NOT_MET';
+    else if(bios.length) bsig='UNKNOWN';
+    rows.push({t,rel,basis,lo,hi:hiRaw,bios,bsig});
+  }
+  rows.sort((a,b)=> (RANK[a.bsig]-RANK[b.bsig]) || (a.rel==='exact'?-1:0));
+  render(rows,{pt,age,sex,ptGenes,activeCase,staleHidden});
+}
+
+function badge(r){return `<span class="badge ${r}">${r.replace('_',' ')}</span>`;}
+function render(rows,ctx){
+  const el=document.getElementById('results');
+  const nMet=rows.filter(r=>r.bsig==='MET').length;
+  const nNot=rows.filter(r=>r.bsig==='NOT_MET').length;
+  let html='';
+  html+=`<div class="disclaimer">⚠ Candidate list for physician review only — <b>not an eligibility determination</b>. Gene matching is at the <b>gene level</b>, not variant level: a match means the gene is named in the criteria, not that the patient's specific variant qualifies. Always read the cited source sentence and verify on ClinicalTrials.gov. Recruiting status/criteria as of dataset date.</div>`;
+  if(ctx.activeCase) html+=`<div class="summary"><b>${ctx.activeCase.id} — ${ctx.activeCase.label}.</b> ${ctx.activeCase.note}</div>`;
+  html+=`<div class="summary">${rows.length} candidate trials · ${ctx.pt}, age ${ctx.age}, ${ctx.sex}, genes: ${ctx.ptGenes.length?ctx.ptGenes.map(g=>g+'='+geneState[g]).join(', '):'none entered'} · <b style="color:var(--met)">${nMet} biomarker-MET</b>, <b style="color:var(--notmet)">${nNot} biomarker-NOT-MET</b> (surfaced, not excluded).${ctx.staleHidden?` · <span style="color:var(--unknown)">${ctx.staleHidden} likely-stale hidden</span>`:''}</div>`;
+  html+=`<div class="toolbar"><button class="flagbtn" onclick="document.querySelectorAll('.bio').forEach(e=>e.style.display='block')">Expand all</button></div>`;
+
+  let lastG=null;
+  const gname={MET:'Biomarker met (review first)',UNKNOWN:'Biomarker unknown / not gated',NA:'No biomarker gate for entered genes',NOT_MET:'Biomarker not met (surfaced for review)'};
+  rows.forEach(r=>{
+    if(r.bsig!==lastG){ html+=`<div class="rank-g">${gname[r.bsig]}</div>`; lastG=r.bsig; }
+    const f=flags[r.t.nct]||{};
+    const staleBadge = r.t.stale ? `<span class="dim" style="border-color:var(--unknown);color:var(--unknown)" title="${r.t.staleWhy}">⚠ likely stale: ${r.t.staleWhy}</span>` : '';
+    html+=`<div class="trial">
+      <div class="top">
+        <h3><a href="${r.t.url}" target="_blank" rel="noopener">${r.t.title||r.t.nct}</a></h3>
+        <span class="nct">${r.t.nct}</span>
+      </div>
+      <div class="dims">
+        <span class="dim">dx: <b>${r.rel}</b> via ${r.basis}</span>
+        <span class="dim">age ${r.lo}–${r.hi?r.hi:'no cap'}</span>
+        <span class="dim">sex ${r.t.sex}</span>
+        <span class="dim">${(r.t.phase||[]).join('/')}</span>
+        ${r.t.enroll?`<span class="dim">n=${r.t.enroll}</span>`:''}
+        ${r.t.lastUpdate?`<span class="dim">updated ${r.t.lastUpdate}</span>`:''}
+        ${r.t.primaryComp?`<span class="dim">primary completion ${r.t.primaryComp}</span>`:''}
+        ${staleBadge}
+      </div>`;
+    if(r.bios.length){
+      html+=`<div class="bio">`;
+      r.bios.forEach(b=>{
+        html+=`<div class="row">${badge(b.result)}<div>
+          <div><b>${b.gene}</b> — ${b.why} <span class="sec-tag">[${b.section}]</span> <span class="conf">conf: ${b.conf}${b.conflict?' · ⚠ multi-cohort conflict: '+ (b.all_dirs||[]).join(', '):''}</span></div>
+          <div class="cite">“${b.cite}”</div>
+        </div></div>`;
+      });
+      html+=`</div>`;
+    } else if(ctx.ptGenes.length){
+      html+=`<div class="bio"><span class="badge UNKNOWN">UNKNOWN</span> none of the entered genes are named in this trial's cached criteria — biomarker requirement unspecified here.</div>`;
+    }
+    html+=`<div class="flagrow">
+      <button class="flagbtn ${f.flagged?'on':''}" onclick="toggleFlag('${r.t.nct}',this)">${f.flagged?'⚑ flagged':'⚐ flag for review'}</button>
+      <input class="flagnote" placeholder="clinician note (e.g. wrong variant, should/shouldn't match)…" value="${(f.note||'').replace(/"/g,'&quot;')}" onchange="setNote('${r.t.nct}',this.value)"/>
+    </div>`;
+    html+=`</div>`;
+  });
+  if(!rows.length) html+=`<div class="summary">No trials matched. Broaden the diagnosis or check age.</div>`;
+  el.innerHTML=html;
+}
+function toggleFlag(nct,btn){ flags[nct]=flags[nct]||{}; flags[nct].flagged=!flags[nct].flagged;
+  btn.classList.toggle('on',flags[nct].flagged); btn.textContent=flags[nct].flagged?'⚑ flagged':'⚐ flag for review'; }
+function setNote(nct,v){ flags[nct]=flags[nct]||{}; flags[nct].note=v; }
+function exportReview(){
+  const out={exportedAt:new Date().toISOString(),
+    query:{dx:document.getElementById('dx').value,age:document.getElementById('age').value,sex:document.getElementById('sex').value,genes:{...geneState}},
+    flags:Object.entries(flags).filter(([k,v])=>v.flagged||v.note).map(([nct,v])=>({nct,...v}))};
+  const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='clinician_review_'+Date.now()+'.json'; a.click();
+}
+document.getElementById('run').onclick=()=>run(null);
+document.getElementById('export').onclick=exportReview;
+document.getElementById('hideStale').onchange=()=>run(null);
+document.getElementById('meta').textContent=BUNDLE.version+' · '+BUNDLE.counts.searchable+' interventional recruiting trials';
+document.getElementById('filterInfo').innerHTML=BUNDLE.filterNote+` <b>${BUNDLE.counts.stale}</b> of ${BUNDLE.counts.searchable} are flagged likely-stale (primary completion date passed, or not updated in >12 months).`;
+initGenes(); initDx(); initCases();
+</script>
+</body>
+</html>

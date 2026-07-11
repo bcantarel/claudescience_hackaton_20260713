@@ -1,0 +1,133 @@
+[
+ {
+  "id": "P01",
+  "label": "Classic EGFR ex19del, treatment-naive",
+  "oncotree": "LUAD",
+  "age": 58,
+  "sex": "FEMALE",
+  "biomarkers": {
+   "EGFR": "altered"
+  },
+  "note": "Most common targetable driver; expect ALTERED_REQUIRED trials to rank top."
+ },
+ {
+  "id": "P02",
+  "label": "ALK fusion adenocarcinoma",
+  "oncotree": "LUAD",
+  "age": 47,
+  "sex": "MALE",
+  "biomarkers": {
+   "ALK": "altered"
+  },
+  "note": "Younger, never-smoker phenotype."
+ },
+ {
+  "id": "P03",
+  "label": "KRAS G12C, prior chemo",
+  "oncotree": "LUAD",
+  "age": 66,
+  "sex": "MALE",
+  "biomarkers": {
+   "KRAS": "altered"
+  },
+  "note": "Tests KRAS G12C-specific trials."
+ },
+ {
+  "id": "P04",
+  "label": "Driver-negative, PD-L1 high (IO candidate)",
+  "oncotree": "LUAD",
+  "age": 63,
+  "sex": "FEMALE",
+  "biomarkers": {
+   "EGFR": "wildtype",
+   "ALK": "wildtype",
+   "ROS1": "wildtype"
+  },
+  "note": "Should MATCH wild-type-required / IO trials, NOT_MET the targeted ones."
+ },
+ {
+  "id": "P05",
+  "label": "Squamous cell, elderly",
+  "oncotree": "LUSC",
+  "age": 78,
+  "sex": "MALE",
+  "biomarkers": {},
+  "note": "Tests age cap handling + squamous histology; few driver gates."
+ },
+ {
+  "id": "P06",
+  "label": "ROS1 rearrangement",
+  "oncotree": "LUAD",
+  "age": 52,
+  "sex": "FEMALE",
+  "biomarkers": {
+   "ROS1": "altered"
+  },
+  "note": "Rarer driver."
+ },
+ {
+  "id": "P07",
+  "label": "MET exon 14 skipping",
+  "oncotree": "LUAD",
+  "age": 71,
+  "sex": "FEMALE",
+  "biomarkers": {
+   "MET": "altered"
+  },
+  "note": "Tests MET case-sensitive matching."
+ },
+ {
+  "id": "P08",
+  "label": "BRAF V600E",
+  "oncotree": "LUAD",
+  "age": 69,
+  "sex": "MALE",
+  "biomarkers": {
+   "BRAF": "altered"
+  },
+  "note": "Rare driver."
+ },
+ {
+  "id": "P09",
+  "label": "RET fusion",
+  "oncotree": "LUAD",
+  "age": 55,
+  "sex": "FEMALE",
+  "biomarkers": {
+   "RET": "altered"
+  },
+  "note": "Rare driver."
+ },
+ {
+  "id": "P10",
+  "label": "EGFR T790M (resistance) \u2014 variant FP test",
+  "oncotree": "LUAD",
+  "age": 61,
+  "sex": "FEMALE",
+  "biomarkers": {
+   "EGFR": "altered"
+  },
+  "note": "KEY: gene-level will MATCH any EGFR trial incl. those wanting L858R only. Clinician should catch variant mismatch via source sentence."
+ },
+ {
+  "id": "P11",
+  "label": "NSCLC NOS, dual driver EGFR+co-mutation",
+  "oncotree": "NSCLC",
+  "age": 60,
+  "sex": "MALE",
+  "biomarkers": {
+   "EGFR": "altered",
+   "KRAS": "wildtype"
+  },
+  "note": "Generic NSCLC node \u2192 tests 'narrower' dx handling."
+ },
+ {
+  "id": "P12",
+  "label": "Young never-smoker, panel pending",
+  "oncotree": "LUAD",
+  "age": 34,
+  "sex": "FEMALE",
+  "biomarkers": {},
+  "note": "No biomarkers entered \u2192 all biomarker dims = UNKNOWN; tests three-valued honesty."
+ }
+]
