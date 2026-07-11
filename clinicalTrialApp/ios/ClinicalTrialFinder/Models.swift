@@ -10,6 +10,7 @@ struct AppBundle: Decodable {
     let ancestors: [String: [String]]
     let dxOptions: [DxOption]
     let geneCache: [String: GeneEntry]
+    let criteriaCache: [String: CriteriaEntry]?
     let genes: [String]
 }
 
@@ -48,4 +49,24 @@ struct GeneEntry: Decodable {
     let confidence: String?
     let cited_span: String?
     let section: String?
+}
+
+// Clinical-criteria cache: per-trial structured requirements.
+struct CriteriaEntry: Decodable {
+    let ecogMax: Int?
+    let ecogCite: String?
+    let labs: [String: LabThreshold]?
+    let brainMets: String?   // "excluded" | "allowed_if_treated" | "unspecified"
+    let priorIO: String?     // "excluded" | "unspecified"
+    let priorTx: String?     // "naive_required" | "pretreated_required" | "unspecified"
+    let brainCite: String?
+    let ioCite: String?
+    let txCite: String?
+}
+
+struct LabThreshold: Decodable {
+    let op: String           // ">=" or "<="
+    let val: Double
+    let uln: Bool?
+    let cite: String?
 }
