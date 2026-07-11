@@ -4,6 +4,7 @@ from oncotree import load, ancestors
 from crosswalk import crosswalk
 S=json.load(open("data/nsclc_recruiting.json")); nodes,by_code=load()
 cache=json.load(open("data/gene_cache_full.json"))
+criteria=json.load(open("data/criteria_cache.json"))
 TODAY=date(2026,7,8)
 def g(s,*p):
     c=s
@@ -63,6 +64,7 @@ bundle={
   "filterNote":"Interventional studies only; studies whose overall completion date has already passed are excluded. Observational studies and completed studies are omitted.",
   "counts":{"searchable":len(trials),"stale":n_stale},
   "trials":trials,"ancestors":anc_map,"dxOptions":dx_options,"geneCache":cache,
+  "criteriaCache":criteria,
   "genes":["EGFR","ALK","ROS1","KRAS","MET","BRAF","RET","ERBB2","NTRK","NRG1"],
   "geneAliases":{sym:v["aliases"] for sym,v in __import__("genes_dict").PANEL.items()},
 }

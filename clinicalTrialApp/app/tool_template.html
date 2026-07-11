@@ -94,6 +94,26 @@
     <label>Gene profile (click to cycle: — → altered → wild-type)</label>
     <div class="genes" id="genes"></div>
 
+    <label style="margin-top:16px">Clinical criteria (optional)</label>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:3px">ECOG</div>
+        <select id="ecog"><option value="">—</option><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:3px">Prior treatment</div>
+        <select id="priorTx"><option value="">—</option><option value="naive">Treatment-naive</option><option value="pretreated">Previously treated</option></select>
+      </div>
+    </div>
+    <label style="display:flex;align-items:center;gap:7px;margin:9px 0 3px;color:var(--ink);font-size:12px">
+      <input type="checkbox" id="brainMets" style="width:auto"/> Patient has brain / CNS metastases</label>
+    <label style="display:flex;align-items:center;gap:7px;margin:3px 0;color:var(--ink);font-size:12px">
+      <input type="checkbox" id="priorIO" style="width:auto"/> Patient had prior immunotherapy</label>
+    <details style="margin-top:6px">
+      <summary style="cursor:pointer;font-size:12px;color:var(--accent)">Labs (optional)</summary>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px" id="labInputs"></div>
+    </details>
+
     <label for="sort">Sort by</label>
     <select id="sort">
       <option value="relevance">Biomarker relevance</option>
@@ -112,6 +132,9 @@
     <div style="font-size:12px;color:var(--muted)">
       <label style="display:flex;align-items:center;gap:7px;margin:6px 0;color:var(--ink);font-size:12px">
         <input type="checkbox" id="hideStale" checked style="width:auto"/> Hide likely-stale trials
+      </label>
+      <label style="display:flex;align-items:center;gap:7px;margin:6px 0;color:var(--ink);font-size:12px">
+        <input type="checkbox" id="hideFails" style="width:auto"/> Hide trials patient fails on entered criteria
       </label>
       <div id="filterInfo" style="line-height:1.45"></div>
     </div>
@@ -168,6 +191,55 @@ function initCases(){
   });
 }
 
+// --- clinical criteria ---
+const LABS=[
+ {key:'anc',label:'ANC',unit:'×10⁹/L',dir:'ge'},
+ {key:'plt',label:'Platelets',unit:'×10⁹/L',dir:'ge'},
+ {key:'hgb',label:'Hemoglobin',unit:'g/dL',dir:'ge'},
+ {key:'cr',label:'Creatinine',unit:'mg/dL',dir:'le'},
+ {key:'bili',label:'Bilirubin',unit:'mg/dL',dir:'le'},
+ {key:'astalt',label:'AST/ALT',unit:'×ULN',dir:'le'},
+];
+function readCriteria(){
+  const labs={}; LABS.forEach(L=>{const v=document.getElementById('lab_'+L.key).value; labs[L.key]=v===''?null:parseFloat(v);});
+  return {
+    ecog:document.getElementById('ecog').value,
+    priorTx:document.getElementById('priorTx').value,
+    brainMets:document.getElementById('brainMets').checked,
+    priorIO:document.getElementById('priorIO').checked,
+    labs,
+  };
+}
+function critResults(t, pc){
+  const c=BUNDLE.criteriaCache[t.nct]||{}; const out=[];
+  if(pc.ecog!==''){
+    if(c.ecogMax==null) out.push({k:'ECOG',res:'UNKNOWN',txt:'ECOG limit not found in criteria',cite:''});
+    else out.push({k:'ECOG',res:(+pc.ecog<=c.ecogMax)?'MET':'NOT_MET',txt:`trial allows ECOG ≤ ${c.ecogMax}; patient ${pc.ecog}`,cite:c.ecogCite||''});
+  }
+  if(pc.brainMets){
+    if(c.brainMets==='excluded') out.push({k:'Brain/CNS mets',res:'NOT_MET',txt:'active brain/CNS metastases excluded',cite:c.brainCite||''});
+    else if(c.brainMets==='allowed_if_treated') out.push({k:'Brain/CNS mets',res:'MET',txt:'treated/stable brain mets allowed — verify patient meets the specifics',cite:c.brainCite||''});
+    else out.push({k:'Brain/CNS mets',res:'UNKNOWN',txt:'brain-mets rule not specified',cite:''});
+  }
+  if(pc.priorIO){
+    if(c.priorIO==='excluded') out.push({k:'Prior immunotherapy',res:'NOT_MET',txt:'prior immunotherapy not permitted',cite:c.ioCite||''});
+    else out.push({k:'Prior immunotherapy',res:'UNKNOWN',txt:'prior-immunotherapy rule not specified',cite:''});
+  }
+  if(pc.priorTx){
+    if(c.priorTx==='naive_required') out.push({k:'Prior treatment',res:pc.priorTx==='naive'?'MET':'NOT_MET',txt:'trial requires treatment-naive',cite:c.txCite||''});
+    else if(c.priorTx==='pretreated_required') out.push({k:'Prior treatment',res:pc.priorTx==='pretreated'?'MET':'NOT_MET',txt:'trial requires prior therapy',cite:c.txCite||''});
+    else out.push({k:'Prior treatment',res:'UNKNOWN',txt:'line-of-therapy not specified',cite:''});
+  }
+  LABS.forEach(L=>{
+    const pv=pc.labs[L.key]; if(pv==null||isNaN(pv)) return;
+    const lab=(c.labs||{})[L.key];
+    if(!lab){ out.push({k:L.label,res:'UNKNOWN',txt:`no ${L.label} threshold found`,cite:''}); return; }
+    const ok = L.dir==='ge' ? (pv>=lab.val) : (pv<=lab.val);
+    out.push({k:L.label,res:ok?'MET':'NOT_MET',txt:`trial ${lab.op} ${lab.val}${lab.uln?'×ULN':''}; patient ${pv} — verify units`,cite:lab.cite||''});
+  });
+  return out;
+}
+
 // --- matcher logic (mirrors matcher.py / classifier.py) ---
 function parseAge(a){ if(!a) return null; const m=(''+a).match(/(\d+)/); return m?+m[1]:null; }
 function dxRelation(pt, trialCodes){
@@ -192,10 +264,12 @@ function run(activeCase){
   const age=parseAge(document.getElementById('age').value);
   const sex=document.getElementById('sex').value;
   const hideStale=document.getElementById('hideStale').checked;
+  const hideFails=document.getElementById('hideFails').checked;
   const sortMode=document.getElementById('sort').value;
   const startAfter=document.getElementById('startAfter').value; // "" or "YYYY"
   const ptGenes=Object.keys(geneState);
-  const rows=[]; let staleHidden=0, dateHidden=0;
+  const pc=readCriteria();
+  const rows=[]; let staleHidden=0, dateHidden=0, failHidden=0;
   for(const t of BUNDLE.trials){
     const [rel,basis]=dxRelation(pt,t.dxCodes);
     if(!rel) continue;
@@ -218,7 +292,9 @@ function run(activeCase){
     if(bios.some(b=>b.result==='MET')) bsig='MET';
     else if(bios.some(b=>b.result==='NOT_MET')) bsig='NOT_MET';
     else if(bios.length) bsig='UNKNOWN';
-    rows.push({t,rel,basis,lo,hi:hiRaw,bios,bsig});
+    const crits=critResults(t, pc);
+    if(hideFails && crits.some(c=>c.res==='NOT_MET')){ failHidden++; continue; }
+    rows.push({t,rel,basis,lo,hi:hiRaw,bios,bsig,crits});
   }
   const cmpDate=(x,y,field,dir)=>{
     const dx=x.t[field]||'', dy=y.t[field]||'';
@@ -229,7 +305,7 @@ function run(activeCase){
   else if(sortMode==='start_asc') rows.sort((a,b)=>cmpDate(a,b,'start','asc'));
   else if(sortMode==='updated_desc') rows.sort((a,b)=>cmpDate(a,b,'lastUpdate','desc'));
   else rows.sort((a,b)=> (RANK[a.bsig]-RANK[b.bsig]) || (a.rel==='exact'?-1:0));
-  render(rows,{pt,age,sex,ptGenes,activeCase,staleHidden,dateHidden,sortMode,startAfter});
+  render(rows,{pt,age,sex,ptGenes,activeCase,staleHidden,dateHidden,failHidden,sortMode,startAfter});
 }
 
 function badge(r){return `<span class="badge ${r}">${r.replace('_',' ')}</span>`;}
@@ -257,7 +333,7 @@ function render(rows,ctx){
   html+=`<div class="disclaimer">⚠ Candidate list for physician review only — <b>not an eligibility determination</b>. Gene matching is at the <b>gene level</b>, not variant level: a match means the gene is named in the criteria, not that the patient's specific variant qualifies. Always read the cited source sentence and verify on ClinicalTrials.gov. Recruiting status/criteria as of dataset date.</div>`;
   if(ctx.activeCase) html+=`<div class="summary"><b>${ctx.activeCase.id} — ${ctx.activeCase.label}.</b> ${ctx.activeCase.note}</div>`;
   const sortLabel={relevance:'biomarker relevance',start_desc:'start date (newest first)',start_asc:'start date (oldest first)',updated_desc:'recently updated'}[ctx.sortMode]||'';
-  html+=`<div class="summary">${rows.length} candidate trials · ${ctx.pt}, age ${ctx.age}, ${ctx.sex}, genes: ${ctx.ptGenes.length?ctx.ptGenes.map(g=>g+'='+geneState[g]).join(', '):'none entered'} · <b style="color:var(--met)">${nMet} biomarker-MET</b>, <b style="color:var(--notmet)">${nNot} biomarker-NOT-MET</b> (surfaced, not excluded).${ctx.staleHidden?` · <span style="color:var(--unknown)">${ctx.staleHidden} likely-stale hidden</span>`:''}${ctx.dateHidden?` · <span style="color:var(--unknown)">${ctx.dateHidden} before ${ctx.startAfter} hidden</span>`:''} · sorted by ${sortLabel}</div>`;
+  html+=`<div class="summary">${rows.length} candidate trials · ${ctx.pt}, age ${ctx.age}, ${ctx.sex}, genes: ${ctx.ptGenes.length?ctx.ptGenes.map(g=>g+'='+geneState[g]).join(', '):'none entered'} · <b style="color:var(--met)">${nMet} biomarker-MET</b>, <b style="color:var(--notmet)">${nNot} biomarker-NOT-MET</b> (surfaced, not excluded).${ctx.staleHidden?` · <span style="color:var(--unknown)">${ctx.staleHidden} likely-stale hidden</span>`:''}${ctx.dateHidden?` · <span style="color:var(--unknown)">${ctx.dateHidden} before ${ctx.startAfter} hidden</span>`:''}${ctx.failHidden?` · <span style="color:var(--unknown)">${ctx.failHidden} criteria-fails hidden</span>`:''} · sorted by ${sortLabel}</div>`;
   html+=`<div class="toolbar"><button class="flagbtn" onclick="document.querySelectorAll('.bio').forEach(e=>e.style.display='block')">Expand all</button></div>`;
 
   let lastG=null;
@@ -295,6 +371,16 @@ function render(rows,ctx){
     } else if(ctx.ptGenes.length){
       html+=`<div class="bio"><span class="badge UNKNOWN">UNKNOWN</span> none of the entered genes are named in this trial's cached criteria — biomarker requirement unspecified here.</div>`;
     }
+    if(r.crits && r.crits.length){
+      html+=`<div class="bio">`;
+      r.crits.forEach(c=>{
+        html+=`<div class="row">${badge(c.res)}<div>
+          <div><b>${c.k}</b> — ${c.txt}</div>
+          ${c.cite?`<div class="cite">“${c.cite}”</div>`:''}
+        </div></div>`;
+      });
+      html+=`</div>`;
+    }
     html+=`<details class="elig"><summary>Full eligibility criteria (inclusion + exclusion)</summary><div class="eligbody">${formatElig(r.t.elig, ctx.ptGenes)}</div></details>`;
     html+=`<div class="flagrow">
       <button class="flagbtn ${f.flagged?'on':''}" onclick="toggleFlag('${r.t.nct}',this)">${f.flagged?'⚑ flagged':'⚐ flag for review'}</button>
@@ -325,11 +411,22 @@ function exportReview(){
     const o=document.createElement('option'); o.value=y; o.textContent=y+' or later'; sel.appendChild(o);
   });
 })();
+// populate lab inputs
+(function(){
+  const box=document.getElementById('labInputs');
+  LABS.forEach(L=>{
+    const w=document.createElement('div');
+    w.innerHTML=`<div style="font-size:10px;color:var(--muted)">${L.label} <span style="opacity:.7">${L.unit}</span></div>
+      <input id="lab_${L.key}" type="number" step="any" placeholder="—" style="padding:6px 8px"/>`;
+    box.appendChild(w);
+  });
+})();
 document.getElementById('run').onclick=()=>run(null);
 document.getElementById('export').onclick=exportReview;
-document.getElementById('hideStale').onchange=()=>run(null);
-document.getElementById('sort').onchange=()=>run(null);
-document.getElementById('startAfter').onchange=()=>run(null);
+['hideStale','hideFails','sort','startAfter','ecog','priorTx','brainMets','priorIO'].forEach(id=>{
+  const el=document.getElementById(id); el.addEventListener('change',()=>run(null));
+});
+LABS.forEach(L=>document.getElementById('lab_'+L.key).addEventListener('change',()=>run(null)));
 document.getElementById('meta').textContent=BUNDLE.version+' · '+BUNDLE.counts.searchable+' interventional recruiting trials';
 document.getElementById('filterInfo').innerHTML=BUNDLE.filterNote+` <b>${BUNDLE.counts.stale}</b> of ${BUNDLE.counts.searchable} are flagged likely-stale (primary completion date passed, or not updated in >12 months).`;
 initGenes(); initDx(); initCases();

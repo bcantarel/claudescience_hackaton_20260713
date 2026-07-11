@@ -1,0 +1,26 @@
+Classify clinical-trial eligibility snippets for THREE fields per trial (NSCLC).
+Each item has: nct, brain (sentences mentioning brain/CNS mets), io (sentences mentioning
+immunotherapy/checkpoint), priortx (sentences about prior treatment / lines / naive).
+A field's snippets may be empty -> use "unspecified".
+
+Output ONE json object per item in order:
+{"i":<i>,
+ "brainMets":"excluded"|"allowed_if_treated"|"unspecified",
+ "brainCite":"<exact substring of the brain snippets or empty>",
+ "priorIO":"excluded"|"unspecified",
+ "ioCite":"<exact substring of io snippets or empty>",
+ "priorTx":"naive_required"|"pretreated_required"|"unspecified",
+ "txCite":"<exact substring of priortx snippets or empty>"}
+
+Rules:
+- brainMets: "excluded" if ACTIVE/untreated/symptomatic brain or CNS metastases are an exclusion
+  with no allowance; "allowed_if_treated" if treated/stable/asymptomatic CNS mets are permitted
+  (e.g. "treated and stable brain metastases are eligible"); else "unspecified".
+- priorIO: "excluded" if prior anti-PD-1/PD-L1/checkpoint/immunotherapy is disallowed
+  (e.g. "no prior PD-1/PD-L1 inhibitor", "prior immunotherapy is not permitted"); else "unspecified".
+  (A trial that USES immunotherapy as its drug is NOT itself excluding prior IO — only classify
+   excluded when prior IO is barred.)
+- priorTx: "naive_required" if the trial requires treatment-naive / no prior systemic therapy /
+  first-line; "pretreated_required" if it requires prior therapy / progression on a prior line /
+  second-line+; else "unspecified".
+- cite fields must be exact substrings of the provided snippets (or "").
