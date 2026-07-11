@@ -45,7 +45,7 @@ for s in S:
         "minAge":elig.get("minimumAge"),"maxAge":elig.get("maximumAge"),"sex":elig.get("sex","ALL"),
         "phase":(g(ps,"designModule","phases") or ["NA"]),
         "enroll":g(ps,"designModule","enrollmentInfo","count"),
-        "start":pc and g(ps,"statusModule","startDateStruct","date"),
+        "start":g(ps,"statusModule","startDateStruct","date"),
         "primaryComp":pc,"comp":cc,"lastUpdate":lu,
         "dxCodes":sorted(tc.keys()),
         "stale": bool(stale_reasons), "staleWhy": "; ".join(stale_reasons),

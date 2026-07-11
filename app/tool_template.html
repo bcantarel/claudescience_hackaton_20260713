@@ -86,6 +86,17 @@
     <label>Gene profile (click to cycle: — → altered → wild-type)</label>
     <div class="genes" id="genes"></div>
 
+    <label for="sort">Sort by</label>
+    <select id="sort">
+      <option value="relevance">Biomarker relevance</option>
+      <option value="start_desc">Start date — newest first</option>
+      <option value="start_asc">Start date — oldest first</option>
+      <option value="updated_desc">Recently updated</option>
+    </select>
+
+    <label for="startAfter">Started on/after</label>
+    <select id="startAfter"><option value="">Any date</option></select>
+
     <button id="run">Find candidate trials</button>
     <button id="export" class="sec">Export clinician review (JSON)</button>
 
@@ -173,12 +184,15 @@ function run(activeCase){
   const age=parseAge(document.getElementById('age').value);
   const sex=document.getElementById('sex').value;
   const hideStale=document.getElementById('hideStale').checked;
+  const sortMode=document.getElementById('sort').value;
+  const startAfter=document.getElementById('startAfter').value; // "" or "YYYY"
   const ptGenes=Object.keys(geneState);
-  const rows=[]; let staleHidden=0;
+  const rows=[]; let staleHidden=0, dateHidden=0;
   for(const t of BUNDLE.trials){
     const [rel,basis]=dxRelation(pt,t.dxCodes);
     if(!rel) continue;
     if(hideStale && t.stale){ staleHidden++; continue; }
+    if(startAfter && (!t.start || t.start.slice(0,4) < startAfter)){ dateHidden++; continue; }
     const lo=parseAge(t.minAge)??0, hiRaw=parseAge(t.maxAge), hi=hiRaw??200;
     if(!(age>=lo && age<=hi)) continue;
     if(!(t.sex==='ALL'||t.sex===sex)) continue;
@@ -198,8 +212,16 @@ function run(activeCase){
     else if(bios.length) bsig='UNKNOWN';
     rows.push({t,rel,basis,lo,hi:hiRaw,bios,bsig});
   }
-  rows.sort((a,b)=> (RANK[a.bsig]-RANK[b.bsig]) || (a.rel==='exact'?-1:0));
-  render(rows,{pt,age,sex,ptGenes,activeCase,staleHidden});
+  const cmpDate=(x,y,field,dir)=>{
+    const dx=x.t[field]||'', dy=y.t[field]||'';
+    if(dx===dy) return RANK[x.bsig]-RANK[y.bsig];      // tiebreak by relevance
+    return dir==='desc' ? (dy<dx?-1:1) : (dx<dy?-1:1);
+  };
+  if(sortMode==='start_desc') rows.sort((a,b)=>cmpDate(a,b,'start','desc'));
+  else if(sortMode==='start_asc') rows.sort((a,b)=>cmpDate(a,b,'start','asc'));
+  else if(sortMode==='updated_desc') rows.sort((a,b)=>cmpDate(a,b,'lastUpdate','desc'));
+  else rows.sort((a,b)=> (RANK[a.bsig]-RANK[b.bsig]) || (a.rel==='exact'?-1:0));
+  render(rows,{pt,age,sex,ptGenes,activeCase,staleHidden,dateHidden,sortMode,startAfter});
 }
 
 function badge(r){return `<span class="badge ${r}">${r.replace('_',' ')}</span>`;}
@@ -210,13 +232,15 @@ function render(rows,ctx){
   let html='';
   html+=`<div class="disclaimer">⚠ Candidate list for physician review only — <b>not an eligibility determination</b>. Gene matching is at the <b>gene level</b>, not variant level: a match means the gene is named in the criteria, not that the patient's specific variant qualifies. Always read the cited source sentence and verify on ClinicalTrials.gov. Recruiting status/criteria as of dataset date.</div>`;
   if(ctx.activeCase) html+=`<div class="summary"><b>${ctx.activeCase.id} — ${ctx.activeCase.label}.</b> ${ctx.activeCase.note}</div>`;
-  html+=`<div class="summary">${rows.length} candidate trials · ${ctx.pt}, age ${ctx.age}, ${ctx.sex}, genes: ${ctx.ptGenes.length?ctx.ptGenes.map(g=>g+'='+geneState[g]).join(', '):'none entered'} · <b style="color:var(--met)">${nMet} biomarker-MET</b>, <b style="color:var(--notmet)">${nNot} biomarker-NOT-MET</b> (surfaced, not excluded).${ctx.staleHidden?` · <span style="color:var(--unknown)">${ctx.staleHidden} likely-stale hidden</span>`:''}</div>`;
+  const sortLabel={relevance:'biomarker relevance',start_desc:'start date (newest first)',start_asc:'start date (oldest first)',updated_desc:'recently updated'}[ctx.sortMode]||'';
+  html+=`<div class="summary">${rows.length} candidate trials · ${ctx.pt}, age ${ctx.age}, ${ctx.sex}, genes: ${ctx.ptGenes.length?ctx.ptGenes.map(g=>g+'='+geneState[g]).join(', '):'none entered'} · <b style="color:var(--met)">${nMet} biomarker-MET</b>, <b style="color:var(--notmet)">${nNot} biomarker-NOT-MET</b> (surfaced, not excluded).${ctx.staleHidden?` · <span style="color:var(--unknown)">${ctx.staleHidden} likely-stale hidden</span>`:''}${ctx.dateHidden?` · <span style="color:var(--unknown)">${ctx.dateHidden} before ${ctx.startAfter} hidden</span>`:''} · sorted by ${sortLabel}</div>`;
   html+=`<div class="toolbar"><button class="flagbtn" onclick="document.querySelectorAll('.bio').forEach(e=>e.style.display='block')">Expand all</button></div>`;
 
   let lastG=null;
+  const grouped = ctx.sortMode==='relevance';
   const gname={MET:'Biomarker met (review first)',UNKNOWN:'Biomarker unknown / not gated',NA:'No biomarker gate for entered genes',NOT_MET:'Biomarker not met (surfaced for review)'};
   rows.forEach(r=>{
-    if(r.bsig!==lastG){ html+=`<div class="rank-g">${gname[r.bsig]}</div>`; lastG=r.bsig; }
+    if(grouped && r.bsig!==lastG){ html+=`<div class="rank-g">${gname[r.bsig]}</div>`; lastG=r.bsig; }
     const f=flags[r.t.nct]||{};
     const staleBadge = r.t.stale ? `<span class="dim" style="border-color:var(--unknown);color:var(--unknown)" title="${r.t.staleWhy}">⚠ likely stale: ${r.t.staleWhy}</span>` : '';
     html+=`<div class="trial">
@@ -230,6 +254,7 @@ function render(rows,ctx){
         <span class="dim">sex ${r.t.sex}</span>
         <span class="dim">${(r.t.phase||[]).join('/')}</span>
         ${r.t.enroll?`<span class="dim">n=${r.t.enroll}</span>`:''}
+        ${r.t.start?`<span class="dim">started ${r.t.start}</span>`:''}
         ${r.t.lastUpdate?`<span class="dim">updated ${r.t.lastUpdate}</span>`:''}
         ${r.t.primaryComp?`<span class="dim">primary completion ${r.t.primaryComp}</span>`:''}
         ${staleBadge}
@@ -266,9 +291,20 @@ function exportReview(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download='clinician_review_'+Date.now()+'.json'; a.click();
 }
+// populate "started on/after" year options from the data range
+(function(){
+  const yrs=new Set();
+  BUNDLE.trials.forEach(t=>{ if(t.start) yrs.add(t.start.slice(0,4)); });
+  const sel=document.getElementById('startAfter');
+  [...yrs].filter(Boolean).sort().reverse().forEach(y=>{
+    const o=document.createElement('option'); o.value=y; o.textContent=y+' or later'; sel.appendChild(o);
+  });
+})();
 document.getElementById('run').onclick=()=>run(null);
 document.getElementById('export').onclick=exportReview;
 document.getElementById('hideStale').onchange=()=>run(null);
+document.getElementById('sort').onchange=()=>run(null);
+document.getElementById('startAfter').onchange=()=>run(null);
 document.getElementById('meta').textContent=BUNDLE.version+' · '+BUNDLE.counts.searchable+' interventional recruiting trials';
 document.getElementById('filterInfo').innerHTML=BUNDLE.filterNote+` <b>${BUNDLE.counts.stale}</b> of ${BUNDLE.counts.searchable} are flagged likely-stale (primary completion date passed, or not updated in >12 months).`;
 initGenes(); initDx(); initCases();
