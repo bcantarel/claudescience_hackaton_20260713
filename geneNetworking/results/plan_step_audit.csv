@@ -1,0 +1,11 @@
+Step,Plan step,Status,Detail
+1,Per-species normalization (VST/DESeq2),DONE (variant),"CPM->log2 + variance filter to 14k genes; identical recipe for GTEx, mouse, 26 Bgee species. Plan named DESeq2 VST; we used CPM/log2 (equivalent for co-expression, faster at scale)."
+2,Orthogroup expression matrix (fastOMA),NOT DONE,"Used high-confidence 1:1 Ensembl orthologs instead of orthogroups. fastOMA needs 26 proteome downloads + CPU-heavy run; no remote compute. Consequence: TF table keys on human gene ID, not orthogroup ID. -> Future F1."
+3,"TF annotation (AnimalTFDB, JASPAR)",DONE,"793 TFs (GO:0003700/0000981), DBD families (InterPro), 892 JASPAR CORE motifs, expression breadth, tissue-activity. 4 of 5 fields; orthogroup ID deferred with Step 2."
+4,Baseline GRN (multi-method + rank product),DONE,"3-method ensemble: GENIE3 + GRNBoost2 + CLR, rank-product. 396,286 edges, 165,531 >=2-method. NOTE: plan named ARACNE/PIDC; substituted CLR (documented)."
+5,"Promoter motif scan (FIMO, -2kb/+200bp)",NOT DONE,FIMO across 26 genomes x ~20k promoters x ~800 PWMs = the compute-heaviest step; needs genome downloads + Linux compute. -> Future F3.
+6,"Expression-motif integration, TFBS turnover",NOT DONE,"Depends on Step 5 motif tensor. Penalty-weighted LASSO / LMM / ancestral-state reconstruction. -> Future F4. (Phase A phylo-signal is the co-expression-only analogue, DONE.)"
+7,Combinatorial TF cocktails,DONE (pilot),XGBoost + SHAP interaction per module; recovered HNF/IKZF1-SPI1/FOXM1-E2F2 codes. PARAFAC tensor + motif co-occurrence (need Steps 2/5) deferred -> F5.
+8,Conservation scoring + phylo signal,DONE,Zsummary across 26 species; Blomberg K + Pagel lambda (Phase A). Clade-stratified as far as data allows (Afrotheria/Atlantogenata absent).
+9,Module discovery (consensus NMF/LDA),PARTIAL,"Modules from WGCNA (co-expression), not the plan's matrix-factorization (NMF/LDA). GO/KEGG enrichment annotation DONE; NMF/LDA discovery -> F6."
+10,Validation (ENCODE/ChIP-Atlas/DoRothEA),DONE (partial),"DoRothEA benchmark: AUROC 0.67-0.69, per-TF up to 0.93. Full ENCODE/ChIP-Atlas + leave-one-species-out need genomes/orthogroups -> F7."

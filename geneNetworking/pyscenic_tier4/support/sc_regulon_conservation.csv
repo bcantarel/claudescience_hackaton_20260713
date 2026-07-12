@@ -1,0 +1,11 @@
+cell_type,regulator_identity_rankcorr,top1_same,top1,top5_shared,target_set_jaccard,n_shared_top10
+hepatocyte,0.339,False,RORA/MLXIPL/NFIA,0,0.13,1
+plasma cell,0.358,False,ZEB2/XBP1/XBP1,1,0.108,3
+B cell,0.417,False,BACH2/KLF2/TCF4,0,,0
+NK cell,0.48,False,EPAS1/KLF2/KLF6,0,0.091,2
+T cell,0.456,False,ZEB2/KLF2/KLF6,0,0.173,1
+macrophage,0.461,False,TCF7L2/CEBPB/FOS,1,0.225,2
+monocyte,0.454,False,EPAS1/CEBPB/FOS,1,0.275,1
+endothelial cell,0.447,False,EPAS1/SMAD1/EPAS1,1,0.188,2
+fibroblast,0.431,False,EPAS1/TCF21/TCF21,2,0.191,4
+pneumocyte,0.314,False,ATF3/ETV5/KLF6,0,0.172,1

@@ -1,0 +1,22 @@
+{
+ "h5ad": {
+  "liver_human.h5ad": "https://datasets.cellxgene.cziscience.com/a4b3a49e-062b-4e3f-8915-02f40607651f.h5ad",
+  "liver_mouse.h5ad": "https://datasets.cellxgene.cziscience.com/7d2b585b-81bb-4520-a4ba-0eeeeee3bb8d.h5ad",
+  "liver_lemur.h5ad": "https://datasets.cellxgene.cziscience.com/c126be6e-bc29-4367-a563-493ebed712e5.h5ad",
+  "spleen_human.h5ad": "https://datasets.cellxgene.cziscience.com/5498457f-6a18-4766-b9a3-a2c8c4662703.h5ad",
+  "spleen_mouse.h5ad": "https://datasets.cellxgene.cziscience.com/45c07569-0bba-4fc3-ad5d-adf3ebae4fe4.h5ad",
+  "spleen_lemur.h5ad": "https://datasets.cellxgene.cziscience.com/038459b5-a2d5-49be-afe7-a52db60f01a3.h5ad",
+  "lung_human.h5ad": "https://datasets.cellxgene.cziscience.com/fddf43a3-b7c8-49e9-ac0a-5e24b390849f.h5ad",
+  "lung_mouse.h5ad": "https://datasets.cellxgene.cziscience.com/e67a08e2-96fc-4244-b8a3-fca092b22f77.h5ad",
+  "lung_lemur.h5ad": "https://datasets.cellxgene.cziscience.com/af24ba8a-0c53-4aa6-b7c8-cf1bfec15b41.h5ad",
+  "bonemarrow_human.h5ad": "https://datasets.cellxgene.cziscience.com/4aedb645-7487-4ab0-ad95-ee4db1b8eccd.h5ad",
+  "bonemarrow_mouse.h5ad": "https://datasets.cellxgene.cziscience.com/ed851cb0-43de-4d66-8a82-ef9a05113394.h5ad",
+  "bonemarrow_lemur.h5ad": "https://datasets.cellxgene.cziscience.com/1af01471-603b-4055-a372-d85aab92eb5f.h5ad"
+ },
+ "cistarget": {
+  "hg38_ranking": "https://resources.aertslab.org/cistarget/databases/homo_sapiens/hg38/refseq_r80/mc_v10_clust/gene_based/hg38_10kbp_up_10kbp_down_full_tx_v10_clust.genes_vs_motifs.rankings.feather",
+  "mm10_ranking": "https://resources.aertslab.org/cistarget/databases/mus_musculus/mm10/refseq_r80/mc_v10_clust/gene_based/mm10_10kbp_up_10kbp_down_full_tx_v10_clust.genes_vs_motifs.rankings.feather",
+  "motif_annotations_hgnc": "https://resources.aertslab.org/cistarget/motif2tf/motifs-v10nr_clust-nr.hgnc-m0.001-o0.0.tbl",
+  "motif_annotations_mgi": "https://resources.aertslab.org/cistarget/motif2tf/motifs-v10nr_clust-nr.mgi-m0.001-o0.0.tbl"
+ }
+}

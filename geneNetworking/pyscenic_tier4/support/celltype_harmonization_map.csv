@@ -1,0 +1,97 @@
+cl,name,broad,via,how
+CL:0000037,hematopoietic stem cell,HSC/progenitor,CL:0000037,self
+CL:0000038,erythroid progenitor cell,myeloid cell,CL:0000763,ancestor
+CL:0000049,common myeloid progenitor,hematopoietic cell,CL:0000988,ancestor
+CL:0000050,megakaryocyte-erythroid progenitor cell,myeloid cell,CL:0000763,ancestor
+CL:0000057,fibroblast,fibroblast,CL:0000057,self
+CL:0000062,osteoblast,osteoblast,CL:0000062,self
+CL:0000064,ciliated cell,ciliated cell,CL:0000064,self
+CL:0000068,duct epithelial cell,epithelial cell,CL:0000066,ancestor
+CL:0000077,mesothelial cell,mesothelial,CL:0002078,ancestor
+CL:0000084,T cell,T cell,CL:0000084,self
+CL:0000091,Kupffer cell,Kupffer/macrophage,CL:0000091,self
+CL:0000094,granulocyte,myeloid cell,CL:0000763,ancestor
+CL:0000097,mast cell,mast cell,CL:0000097,self
+CL:0000115,endothelial cell,endothelial cell,CL:0000115,self
+CL:0000136,adipocyte,adipocyte,CL:0000136,self
+CL:0000158,club cell,epithelial cell,CL:0000066,ancestor
+CL:0000182,hepatocyte,hepatocyte,CL:0000182,self
+CL:0000186,myofibroblast cell,connective tissue cell,CL:0002320,ancestor
+CL:0000218,myelinating Schwann cell,Schwann/glia,CL:0000218,self
+CL:0000232,erythrocyte,myeloid cell,CL:0000763,ancestor
+CL:0000233,platelet,myeloid cell,CL:0000763,ancestor
+CL:0000235,macrophage,macrophage,CL:0000235,self
+CL:0000236,B cell,B cell,CL:0000236,self
+CL:0000359,vascular associated smooth muscle cell,smooth muscle,CL:0000359,self
+CL:0000451,dendritic cell,dendritic cell,CL:0000451,self
+CL:0000542,lymphocyte,lymphocyte,CL:0000542,self
+CL:0000547,proerythroblast,myeloid cell,CL:0000763,ancestor
+CL:0000553,megakaryocyte progenitor cell,myeloid cell,CL:0000763,ancestor
+CL:0000557,granulocyte monocyte progenitor cell,myeloid cell,CL:0000763,ancestor
+CL:0000559,promonocyte,myeloid cell,CL:0000763,ancestor
+CL:0000576,monocyte,monocyte,CL:0000576,self
+CL:0000583,alveolar macrophage,macrophage,CL:0000235,ancestor
+CL:0000623,natural killer cell,NK cell,CL:0000623,self
+CL:0000624,"CD4-positive, alpha-beta T cell",CD4 T cell,CL:0000624,self
+CL:0000625,"CD8-positive, alpha-beta T cell",CD8 T cell,CL:0000625,self
+CL:0000632,hepatic stellate cell,fibroblast,CL:0000057,ancestor
+CL:0000646,basal cell,basal cell,CL:0000646,self
+CL:0000669,pericyte,pericyte,CL:0000669,self
+CL:0000763,myeloid cell,myeloid cell,CL:0000763,self
+CL:0000764,erythroid lineage cell,myeloid cell,CL:0000763,ancestor
+CL:0000765,erythroblast,myeloid cell,CL:0000763,ancestor
+CL:0000766,myeloid leukocyte,myeloid cell,CL:0000763,ancestor
+CL:0000767,basophil,basophil,CL:0000767,self
+CL:0000771,eosinophil,eosinophil,CL:0000771,self
+CL:0000775,neutrophil,neutrophil,CL:0000775,self
+CL:0000782,myeloid dendritic cell,dendritic cell,CL:0000451,ancestor
+CL:0000784,plasmacytoid dendritic cell,plasmacytoid DC,CL:0000784,self
+CL:0000786,plasma cell,plasma cell,CL:0000786,self
+CL:0000788,naive B cell,B cell,CL:0000236,ancestor
+CL:0000791,mature alpha-beta T cell,T cell,CL:0000084,ancestor
+CL:0000814,mature NK T cell,T cell,CL:0000084,ancestor
+CL:0000815,regulatory T cell,T cell,CL:0000084,ancestor
+CL:0000816,immature B cell,B cell,CL:0000236,ancestor
+CL:0000817,precursor B cell,B cell,CL:0000236,ancestor
+CL:0000838,lymphoid lineage restricted progenitor cell,hematopoietic cell,CL:0000988,ancestor
+CL:0000860,classical monocyte,monocyte,CL:0000576,ancestor
+CL:0000875,non-classical monocyte,monocyte,CL:0000576,ancestor
+CL:0000895,"naive thymus-derived CD4-positive, alpha-beta T cell",CD4 T cell,CL:0000624,ancestor
+CL:0000900,"naive thymus-derived CD8-positive, alpha-beta T cell",CD8 T cell,CL:0000625,ancestor
+CL:0000914,immature NK T cell,T cell,CL:0000084,ancestor
+CL:0000990,conventional dendritic cell,dendritic cell,CL:0000451,ancestor
+CL:0001065,innate lymphoid cell,lymphocyte,CL:0000542,ancestor
+CL:0002009,macrophage dendritic cell progenitor,myeloid cell,CL:0000763,ancestor
+CL:0002046,early pro-B cell,hematopoietic cell,CL:0000988,ancestor
+CL:0002048,late pro-B cell,B cell,CL:0000236,ancestor
+CL:0002062,pulmonary alveolar type 1 cell,pneumocyte,CL:0000322,ancestor
+CL:0002063,pulmonary alveolar type 2 cell,pneumocyte,CL:0000322,ancestor
+CL:0002138,endothelial cell of lymphatic vessel,endothelial cell,CL:0000115,ancestor
+CL:0002144,capillary endothelial cell,endothelial cell,CL:0000115,ancestor
+CL:0002145,multiciliated columnar cell of tracheobronchial tree,ciliated cell,CL:0000064,ancestor
+CL:0002149,epithelial cell of uterus,mesothelial,CL:0002078,ancestor
+CL:0002191,granulocytopoietic cell,hematopoietic cell,CL:0000988,ancestor
+CL:0002208,brush cell of bronchus,epithelial cell,CL:0000066,ancestor
+CL:0002241,pulmonary interstitial fibroblast,fibroblast,CL:0000057,ancestor
+CL:0002262,endothelial cell of sinusoid,endothelial cell,CL:0000115,ancestor
+CL:0002370,respiratory tract goblet cell,epithelial cell,CL:0000066,ancestor
+CL:0002376,non-myelinating Schwann cell,other/unmapped,,none
+CL:0002393,intermediate monocyte,monocyte,CL:0000576,ancestor
+CL:0002503,adventitial cell,connective tissue cell,CL:0002320,ancestor
+CL:0002538,intrahepatic cholangiocyte,epithelial cell,CL:0000066,ancestor
+CL:0002543,vein endothelial cell,endothelial cell,CL:0000115,ancestor
+CL:0002553,fibroblast of lung,fibroblast,CL:0000057,ancestor
+CL:0002591,smooth muscle cell of the pulmonary artery,smooth muscle,CL:0000359,ancestor
+CL:0002598,bronchial smooth muscle cell,smooth muscle,CL:0000192,ancestor
+CL:0007010,preosteoblast,connective tissue cell,CL:0002320,ancestor
+CL:0008001,hematopoietic precursor cell,hematopoietic cell,CL:0000988,ancestor
+CL:0017000,pulmonary ionocyte,epithelial cell,CL:0000066,ancestor
+CL:1000223,pulmonary neuroendocrine cell,epithelial cell,CL:0000066,ancestor
+CL:1000271,lung multiciliated epithelial cell,ciliated cell,CL:0000064,ancestor
+CL:1000331,serous cell of epithelium of bronchus,secretory epithelial,CL:1000331,self
+CL:1000349,basal cell of epithelium of bronchus,basal cell,CL:0000646,ancestor
+CL:1000398,endothelial cell of hepatic sinusoid,endothelial cell,CL:0000115,ancestor
+CL:1000413,endothelial cell of artery,endothelial cell,CL:0000115,ancestor
+CL:1001603,lung macrophage,macrophage,CL:0000235,ancestor
+CL:4028006,alveolar adventitial fibroblast,fibroblast,CL:0000057,ancestor
+unknown,unknown,other/unmapped,,none

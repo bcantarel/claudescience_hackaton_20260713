@@ -4,6 +4,13 @@ Discovering tissue-defining gene co-expression modules in human, then testing
 which of them are preserved across the vertebrate tree — and building the
 transcription-factor regulatory layer on top of the conserved modules.
 
+**Document map**
+- **`README.md`** (this file) — orientation: questions, approach, results-at-a-glance, layout.
+- **`FINDINGS.md`** — the complete record of what was done and every finding, with numbers.
+- **`FUTURE_DIRECTIONS.md`** — step-by-step audit of the original 10-step plan
+  (what was done, what wasn't, and why), plus the deferred genome-scale roadmap (F1–F8).
+- **`reports/`** — per-phase result writeups and the active analysis plan.
+
 ---
 
 ## 1. The questions
@@ -91,6 +98,13 @@ genuinely varies by clade.
   sanity gate cleanly: HNF4A #1 in liver, IKZF1 #1 in immune, SOX2 #2 in brain,
   CEBPA #1 — canonical master regulators rank top of their modules, and
   requiring multi-method agreement *sharpens* the signal.
+- **TF cocktails (Step 7)** — XGBoost + SHAP-interaction per module recovers
+  textbook combinatorial codes purely from expression: liver **HNF1A+HNF4A+HNF1B**
+  (top synergy HNF4A×NR1H4/FXR), immune **IKZF1×SPI1**, testis **FOXM1×E2F2**
+  (cell-cycle), and the HOXA cocktail for the patterning module. The strongest
+  single interactions across all 2,835 pairs are in the spleen/immune module M14
+  (IKZF1×BHLHA15 = 1.18, IKZF1×IRF4 = 1.15), followed by liver M13 NR1I3(CAR)×ATF5
+  (1.11).
 
 ## 4. Data sources
 - **recount3** (`recount-opendata.s3.amazonaws.com`) — human GTEx (30 tissues,
@@ -121,7 +135,9 @@ genuinely varies by clade.
 ```
 README.md                         this file
 reports/
-  analysis_plan_integrated.md     full integrated plan (Phases A + B + uploaded TF plan)
+  analysis_plan_active.md         ACTIVE plan — Tier 1 (regulatory logic) + Tier 3 (validation)
+  analysis_plan_future_directions.md  Tier 2 — genome-scale layer, deferred (needs compute)
+  analysis_plan_integrated.md     original full integrated plan (superseded by the two above)
   coexpr_feasibility_report.md    early STRING-based feasibility pilot
   phaseA_phylo_signal_report.md   Phase A results & interpretation
 figures/                          publication-grade figures (one per stage/phase)
@@ -131,8 +147,10 @@ scripts/                          analysis code, numbered by pipeline stage
   02_wgcna_modules.py             WGCNA module discovery (Python)
   04_bgee_preservation_sweep.py   cross-species Zsummary sweep
   05_phaseA_phylo_signal.R        Blomberg K / Pagel lambda
-  06_grn_genie3.py / _grnboost2.py  GRN tree-ensemble methods
-  07_grn_clr.py                   GRN information-theoretic method
+  06_grn_genie3.py / _grnboost2.py  GRN tree-ensemble methods (GENIE3, GRNBoost2)
+  07_grn_clr.py                   GRN information-theoretic method (CLR)
+  08_grn_ensemble.py              rank-product ensemble of the 3 GRN methods
+  09_grn_cocktails.py             TF cocktails (XGBoost + SHAP interaction, Step 7)
   lib_dynamicTreeCut_patched.py   numpy-2.x-patched cutreeHybrid
 data/species_tree.nwk             TimeTree-calibrated 26-species ultrametric tree
 ```

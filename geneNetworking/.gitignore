@@ -1,7 +1,17 @@
 # Ephemeral / large data — re-fetchable from sources in README §4
 *.pkl
 *.npy
+*.h5ad
+*.feather
 /tmp/
+
+# SC-Tier 4 pySCENIC: large re-fetchable inputs (download_manifest.json) + live run outputs.
+# Code (script, Dockerfile, compose, README, support/) IS tracked; data is not.
+pyscenic_tier4/data/
+pyscenic_tier4/cistarget_db/
+pyscenic_tier4/out/
+tier4.log
+nohup.out
 counts_raw*
 wgcna_input*
 dissTOM*

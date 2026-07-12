@@ -1,0 +1,12 @@
+services:
+  pyscenic:
+    build: .
+    image: pyscenic-tier4:local
+    # mount this whole folder into the container; data/, cistarget_db/, out/ persist on the Mac
+    volumes:
+      - ./:/work
+    # give the container most of the Mac's RAM; Docker Desktop's VM cap must be >= this
+    # (Docker Desktop → Settings → Resources → Memory: set to 32 GB)
+    mem_limit: 32g
+    # default command = show help; override on the CLI (see README)
+    command: ["--help"]
