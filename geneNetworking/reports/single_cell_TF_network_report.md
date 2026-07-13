@@ -136,7 +136,7 @@ Full pySCENIC — GRNBoost2 → cisTarget motif pruning → AUCell, with 10 boot
 
 **Canonical masters survive cisTarget pruning where it matters.** Motif pruning is strict — only ~28% of the top-20 co-expression regulators survive as motif-supported regulons — but the lineage masters are among the survivors: **XBP1** (plasma cell, human + mouse), **HNF4A** (hepatocyte, mouse + lemur), and **CEBPB + FOS** (monocyte, all three species). Of the canonical masters tested, 9/22 survive in ≥1 species and 4/22 in ≥2. The XBP1 result is more nuanced than the co-expression run implied: it is a motif-supported plasma-cell regulon in human and mouse but not lemur, where its regulon is dominated by other factors.
 
-**Bootstrap stability gives a confidence layer the earlier networks lacked.** Averaged across units, ~3,900 edges recur in ≥8/10 bootstraps (~7,600 in ≥7/10) — a reproducible network core distinct from the long tail of run-to-run noise.
+**Bootstrap stability gives a confidence layer the earlier networks lacked.** Averaged across units, ~3,900 edges recur in ≥8/10 bootstraps (~7,200 in ≥7/10) — a reproducible network core distinct from the long tail of run-to-run noise.
 
 *Method note: dask/arboreto cannot spawn workers under the analysis sandbox, so the pipeline was containerized and run on the user's Mac; the GRNBoost2 core is identical to arboreto's. One unit (plasma cell/lemur) ran ~3× slower than its siblings for reasons not captured in the logs.*
 
