@@ -1,0 +1,23 @@
+cell_type,master,n_species,species
+plasma cell,XBP1,2,"human,mouse"
+plasma cell,PRDM1,0,
+plasma cell,IRF4,0,
+plasma cell,CREB3L2,0,
+hepatocyte,HNF4A,2,"mouse,lemur"
+hepatocyte,HNF1A,0,
+hepatocyte,MLXIPL,1,mouse
+hepatocyte,NR1H4,0,
+hepatocyte,CEBPA,1,lemur
+hepatocyte,FOXA1,0,
+hepatocyte,NR1I3,0,
+monocyte,SPI1,1,human
+monocyte,CEBPB,3,"human,mouse,lemur"
+monocyte,FOS,3,"human,mouse,lemur"
+monocyte,IRF8,0,
+monocyte,KLF4,0,
+T cell,TCF7,0,
+T cell,GATA3,1,mouse
+T cell,TBX21,0,
+T cell,RUNX3,0,
+T cell,ETS1,1,human
+T cell,LEF1,0,

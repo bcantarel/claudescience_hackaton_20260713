@@ -1,0 +1,5 @@
+cell_type,n_top20,n_retained,retention_pct
+plasma cell,20,8,40
+hepatocyte,20,4,20
+monocyte,20,9,45
+T cell,20,1,5

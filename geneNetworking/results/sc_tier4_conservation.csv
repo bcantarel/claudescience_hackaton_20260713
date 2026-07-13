@@ -1,0 +1,5 @@
+cell_type,reg_set_conservation,random_floor,fold,target_set_conservation,n_reg_shared_2sp,shared_all3
+plasma cell,0.075,0.021,3.5,0.029,10,
+hepatocyte,0.065,0.02,3.2,0.006,9,
+monocyte,0.112,0.024,4.7,0.031,10,"CEBPB,ERG,FOS"
+T cell,0.09,0.018,5.0,0.033,8,E2F8

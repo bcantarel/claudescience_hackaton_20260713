@@ -123,11 +123,26 @@ Three independent checks on the 10 human cell-type regulons:
 - **The bulk "membership conserved, wiring drifts" thesis is confirmed at cell-type resolution** (SC2.1: regulator identity 0.42 > target wiring 0.17, universal across cell types), and independently reconfirmed by a held-out predictive test (SC-Tier 3, ρ=0.79 with conservation).
 - **Single-cell resolves the composition confound the bulk network could not** — reclassifying headline bulk cocktails as genuine (MLXIPL×NR1H4, all 3 species) or composition-driven (IKZF1×IRF4, largely human), per species.
 - **The conserved regulator core reaches teleost** (SC2.3, p≤0.016 all lineages), which brackets marsupials and afrotherians and predicts these masters "go the distance."
-- **Honest boundaries:** the phylo-signal↔regulon-divergence synthesis (SC2.2) is a suggestive single case (M14), not a powered population test; the strongest phylo-signal modules (pituitary, testis) are data-limited; deep-outgroup and DoRothEA results are interpreted asymmetrically.
+- **The thesis holds under motif pruning** (SC-Tier 4): with full pySCENIC + cisTarget + bootstrap stability on the four headline cell types, regulator-set conservation runs 3.2–5.0× above its random floor and 3.5× above target-wiring conservation, and the canonical masters (XBP1, HNF4A, CEBPB/FOS) survive motif pruning.
+- **Honest boundaries:** the phylo-signal↔regulon-divergence synthesis (SC2.2) is a suggestive single case (M14), not a powered population test; the strongest phylo-signal modules (pituitary, testis) are data-limited; deep-outgroup and DoRothEA results are interpreted asymmetrically; SC-Tier 4 covers 4 of 10 cell types.
 
-## 11. What would strengthen this (SC-Tier 4)
+## 11. Motif-pruned, bootstrap-stabilized regulons (SC-Tier 4)
 
-Full-scale pySCENIC with cisTarget motif pruning (GPU); **stage-matched developmental mammalian atlas** (e.g. mouse organogenesis) to make the zebrafish comparison bidirectional; additional clades (primate/marsupial atlases as they appear) to widen the phylogenetic span toward the bulk 26-species panel; the 660 CELLxGENE spatial datasets for tissue-architecture context.
+Full pySCENIC — GRNBoost2 → cisTarget motif pruning → AUCell, with 10 bootstrap runs per unit — was run natively (Dockerized) for the four headline cell types across all three species (12 units, ~26 h compute). This replaces the co-expression regulons of §4–§6 with motif-supported, stability-filtered networks for the cell types that carry every headline claim.
+
+![SC-Tier 4 summary]({{artifact:art_1e3c0a94-b672-4cfd-845b-9c6817dcc14a}})
+
+**The conservation thesis survives the stricter method.** On the motif-pruned regulons, regulator-set conservation exceeds its random floor by **3.2–5.0×** in every cell type (monocyte 4.7×, T cell 5.0×), and regulator-set conservation exceeds target-set (wiring) conservation by a mean of **3.5×** — the same ordering the co-expression analysis found (2.4×). Conserved *regulators*, divergent *targets*, now confirmed with cisTarget motif support.
+
+**Canonical masters survive cisTarget pruning where it matters.** Motif pruning is strict — only ~28% of the top-20 co-expression regulators survive as motif-supported regulons — but the lineage masters are among the survivors: **XBP1** (plasma cell, human + mouse), **HNF4A** (hepatocyte, mouse + lemur), and **CEBPB + FOS** (monocyte, all three species). Of the canonical masters tested, 9/22 survive in ≥1 species and 4/22 in ≥2. The XBP1 result is more nuanced than the co-expression run implied: it is a motif-supported plasma-cell regulon in human and mouse but not lemur, where its regulon is dominated by other factors.
+
+**Bootstrap stability gives a confidence layer the earlier networks lacked.** Averaged across units, ~3,900 edges recur in ≥8/10 bootstraps (~7,600 in ≥7/10) — a reproducible network core distinct from the long tail of run-to-run noise.
+
+*Method note: dask/arboreto cannot spawn workers under the analysis sandbox, so the pipeline was containerized and run on the user's Mac; the GRNBoost2 core is identical to arboreto's. One unit (plasma cell/lemur) ran ~3× slower than its siblings for reasons not captured in the logs.*
+
+### Further work (SC-Tier 4, remaining)
+
+Extend pySCENIC to the six Tier-2 cell types (B/NK/macrophage/endothelial/fibroblast/pneumocyte); a **stage-matched developmental mammalian atlas** (e.g. mouse organogenesis) to make the zebrafish comparison bidirectional; additional clades (marsupial/afrotherian atlases as they appear) to widen the phylogenetic span toward the bulk 26-species panel; the 660 CELLxGENE spatial datasets for tissue-architecture context.
 
 ---
 

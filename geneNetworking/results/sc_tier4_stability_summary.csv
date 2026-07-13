@@ -1,0 +1,13 @@
+cell_type,species,total_edges,edges_ge8,edges_ge7
+plasma cell,human,108035,5741,9143
+plasma cell,mouse,117725,2751,5548
+plasma cell,lemur,113009,3250,6572
+hepatocyte,human,110867,4230,7766
+hepatocyte,mouse,107817,4443,7649
+hepatocyte,lemur,108736,4351,7969
+monocyte,human,109381,5191,8706
+monocyte,mouse,105586,4536,8071
+monocyte,lemur,112060,3940,7311
+T cell,human,127308,1988,4629
+T cell,mouse,114945,3114,6024
+T cell,lemur,113258,3488,6642
