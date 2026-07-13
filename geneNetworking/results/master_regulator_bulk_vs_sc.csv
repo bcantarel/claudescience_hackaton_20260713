@@ -1,0 +1,5 @@
+module,cell_type,tissue,bulk_master,bulk_master_scRNA_rank,scRNA_master,scRNA_master_bulk_rank,bulk_top3,scRNA_top3
+M14,plasma cell,SPLEEN,IKZF1,absent,XBP1,absent,IKZF1/NKX2-3/EBF4,XBP1/JUND/TCF12
+M13,hepatocyte,LIVER,NR1I3,absent,NFIA,absent,NR1I3/ATF5/PROX1,NFIA/KLF12/ETV6
+M10,T cell,SPLEEN,IKZF1,absent,MZF1,absent,IKZF1/TBX21/SPI1,MZF1/BACH2/IRF4
+M15,monocyte,BLOOD,STAT6,absent,SPI1,5,STAT6/TBX21/SP110,SPI1/FOSB/MAF
