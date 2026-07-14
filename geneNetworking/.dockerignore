@@ -1,0 +1,45 @@
+# Build context = repo root. Keep it small: code + small data only.
+# Everything heavy is mounted at runtime (see container/docker-compose.yml),
+# never baked into the image.
+
+# --- large binary deliverables (not needed to run the pipeline) ---
+*.pptx
+*.pdf
+*.png
+
+# --- big scientific data: fetched/mounted at runtime, never copied in ---
+*.h5ad
+*.feather
+*.tar.gz
+*.tar
+*.bam
+*.fastq
+*.fastq.gz
+*.parquet
+*.pkl
+
+# pyscenic runtime data + DBs (mounted; the Dockerfile only copies the
+# driver script + small support/ tables explicitly)
+pyscenic_tier4/data/
+pyscenic_tier4/cistarget_db/
+pyscenic_tier4/out/
+
+# --- results/figures: regenerated into the mounted host repo at runtime ---
+results/
+figures/
+reports/
+master_modules/
+
+# --- VCS / OS / editor cruft ---
+.git/
+.gitignore
+.DS_Store
+**/.DS_Store
+__pycache__/
+**/__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# don't recurse the container dir into itself as build junk
+container/BUILD_NOTES.md
+container/SOP.md

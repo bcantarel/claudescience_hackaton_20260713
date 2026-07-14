@@ -1,0 +1,34 @@
+# coexpr — main Python analysis environment
+# ---------------------------------------------------------------------------
+# Covers: Stage 1 normalization (01), the pure-Python WGCNA route (02 +
+# lib_dynamicTreeCut_patched), Stage 2 cross-species preservation sweep (04),
+# the GRN methods (06 GENIE3/GRNBoost2, 07 CLR, 08 ensemble), TF cocktails
+# (09), functional annotation (10), regulon conservation (11) and the
+# DoRothEA validation (12).
+#
+# numpy 2.x is intentional: the repo's lib_dynamicTreeCut_patched.py was
+# patched specifically for the numpy-2.x float-index change. This env is
+# deliberately kept SEPARATE from the pyscenic env (which needs numpy<1.24).
+name: coexpr
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.11
+  - numpy=2.1.*
+  - pandas=2.2.*
+  - scipy=1.14.*
+  - scikit-learn=1.5.*
+  - lightgbm=4.6.*
+  - py-xgboost=2.0.3        # conda-forge ships xgboost as py-xgboost (2.0.3 = newest linux-64 build)
+  - shap=0.46.*
+  - pyarrow=17.*
+  - joblib=1.4.*
+  - requests=2.32.*
+  - matplotlib-base=3.9.*
+  - seaborn=0.13.*
+  - networkx=3.3.*          # graph handling for GRN edge tables
+  - tqdm
+  - pip
+  - pip:
+      - dynamicTreeCut==0.1.1   # PyPI-only; drives the Python WGCNA route (02)

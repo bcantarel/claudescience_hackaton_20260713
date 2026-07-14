@@ -1,0 +1,33 @@
+# wgcna-r — canonical R WGCNA + phylogenetics environment
+# ---------------------------------------------------------------------------
+# This is the environment the original analysis could NOT create on the
+# researcher's Apple-Silicon Mac: bioconda ships no osx-arm64 build of
+# r-wgcna, which is why Stage 1 was reimplemented in pure Python. Inside a
+# linux-64 container the canonical Bioconductor/CRAN WGCNA (r-wgcna 1.74)
+# installs cleanly, so this env runs the ORIGINAL R WGCNA implementation
+# (container/R/01_wgcna_modules.R) as well as Phase A phylogenetic-signal
+# analysis (scripts/05_phaseA_phylo_signal.R: ape / phytools / nlme).
+#
+# All package/version availability on linux-64 verified against anaconda.org.
+name: wgcna-r
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  # r-wgcna 1.74's newest build is compiled against R 4.5 and pins its own
+  # Bioconductor deps (GO.db 3.22, AnnotationDbi 1.72, impute 1.84,
+  # preprocessCore 1.72). We therefore pin R to 4.5 and let the WGCNA package
+  # resolve those Bioconductor versions itself — pinning them by hand against
+  # R 4.3 is what makes the solve fail.
+  - r-base=4.5.*
+  # --- canonical WGCNA + its clustering deps ---
+  - bioconda::r-wgcna=1.74           # THE original WGCNA package (Langfelder & Horvath)
+  - r-dynamictreecut                 # cutreeDynamic (WGCNA hard dep; >=1.62)
+  - r-fastcluster                    # fast hclust backend WGCNA uses
+  # --- Phase A: phylogenetic signal (05_phaseA_phylo_signal.R) ---
+  - r-ape                            # read.tree / force.ultrametric
+  - r-phytools                       # phylosig (Blomberg K, Pagel lambda)
+  - r-nlme                           # GLS backend phytools depends on
+  # --- IO / CLI used by the R WGCNA driver (plots use base graphics) ---
+  - r-data.table                     # fast matrix TSV read
+  - r-optparse                       # CLI arg parsing in 01_wgcna_modules.R

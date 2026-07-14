@@ -1,0 +1,25 @@
+# =============================================================================
+# geneNetworking — docker compose
+# Run from the container/ directory:  docker compose run --rm gn <subcommand>
+# =============================================================================
+# The whole repo (one level up) is mounted at /opt/geneNetworking/host so that
+# results/, figures/, and the large downloaded data (recount3, Bgee, h5ad,
+# cisTarget feathers) persist on the host and survive container removal.
+#
+# NOTE: the image bakes in scripts/ and data/ at /opt/geneNetworking. The live
+# repo is mounted at /opt/geneNetworking/host — write outputs there (or to an
+# explicit --outdir under it) so they land back on your machine.
+services:
+  gn:
+    build:
+      context: ..                     # repo root, so Dockerfile can COPY scripts/ etc.
+      dockerfile: container/Dockerfile
+    image: genenetworking:latest
+    volumes:
+      - ../:/opt/geneNetworking/host  # live repo <-> container (read/write)
+    working_dir: /opt/geneNetworking/host
+    # The GRN steps (GENIE3/GRNBoost2 on 14k genes) and pySCENIC are the RAM
+    # peaks. Set Docker Desktop -> Settings -> Resources -> Memory >= this.
+    mem_limit: 32g
+    # Default action = show help; override on the CLI.
+    command: ["help"]
